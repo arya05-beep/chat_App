@@ -1,0 +1,7 @@
+GET  http://localhost:3000/api/nmessages/contacts
+Content-Type: application/json
+
+{
+    "email": "abcd@example.com",
+    "password": "abcd1234"
+}
