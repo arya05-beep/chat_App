@@ -25,12 +25,12 @@ const LoginPage = () => {
       <div className="card w-full max-w-md bg-gray-800 shadow-2xl backdrop-blur-lg relative z-10 animate-fade-in border border-gray-700">
         <div className="card-body p-8">
           <div className="text-center mb-6">
-            <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
+            <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-red-600 rounded-full mx-auto mb-4 flex items-center justify-center shadow-lg">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-red-400 bg-clip-text text-transparent">
               Welcome Back
             </h2>
             <p className="text-gray-400 mt-2">Sign in to continue chatting</p>
@@ -85,7 +85,7 @@ const LoginPage = () => {
             
             <button
               type="submit"
-              className="btn w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white border-none shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
+              className="btn w-full bg-gradient-to-r from-purple-600 to-red-600 hover:from-purple-700 hover:to-red-700 text-white border-none shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-200"
               disabled={isLoggingIn}
             >
               {isLoggingIn ? (
@@ -106,7 +106,7 @@ const LoginPage = () => {
           <div className="text-center">
             <p className="text-sm text-gray-400">
               Don't have an account?{" "}
-              <Link to="/signup" className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 hover:from-purple-300 hover:to-pink-300 transition-all">
+              <Link to="/signup" className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-red-400 hover:from-purple-300 hover:to-red-300 transition-all">
                 Create Account →
               </Link>
             </p>

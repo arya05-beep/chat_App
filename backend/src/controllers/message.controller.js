@@ -48,18 +48,12 @@ export const sendMessage = async (req, res) => {
     if (!receiverExists) {
       return res.status(404).json({ message: "Receiver not found." });
     }
-    
-        let imageUrl;
-        if(image){
-            const uploadResponse = await cloudinary.uploader.upload(image);
-            imageUrl = uploadResponse.secure_url;
-        }
 
         const newMessage = new Message({
             senderId,
             receiverId,
             text,
-            image: imageUrl
+            image: image || null
         });
 
         await newMessage.save();
@@ -93,5 +87,28 @@ export const getChatPartners = async (req, res) => {
     } catch (error) {
         console.log("Error fetching chat partners:", error.message);
         res.status(500).json({message: "Server error"});
+    }
+};
+
+export const markMessagesAsRead = async (req, res) => {
+    try {
+        const myId = req.user._id;
+        const { id: senderId } = req.params;
+
+        await Message.updateMany(
+            {
+                senderId: senderId,
+                receiverId: myId,
+                status: { $ne: "read" }
+            },
+            {
+                status: "read"
+            }
+        );
+
+        res.status(200).json({ message: "Messages marked as read" });
+    } catch (error) {
+        console.log("Error marking messages as read:", error.message);
+        res.status(500).json({ message: "Server error" });
     }
 };

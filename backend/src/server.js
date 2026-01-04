@@ -55,6 +55,24 @@ io.on("connection", (socket) => {
         const receiverSocketId = onlineUsers.get(message.receiverId);
         if (receiverSocketId) {
             io.to(receiverSocketId).emit("receive-message", message);
+            // Mark as delivered if receiver is online
+            io.to(receiverSocketId).emit("message-delivered", { messageId: message._id });
+        }
+    });
+    
+    // Handle message delivered
+    socket.on("message-delivered", ({ messageId, senderId }) => {
+        const senderSocketId = onlineUsers.get(senderId);
+        if (senderSocketId) {
+            io.to(senderSocketId).emit("message-status-update", { messageId, status: "delivered" });
+        }
+    });
+    
+    // Handle message read
+    socket.on("message-read", ({ messageId, senderId }) => {
+        const senderSocketId = onlineUsers.get(senderId);
+        if (senderSocketId) {
+            io.to(senderSocketId).emit("message-status-update", { messageId, status: "read" });
         }
     });
     

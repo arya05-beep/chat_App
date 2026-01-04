@@ -24,6 +24,8 @@ export const useChatStore = create((set, get) => ({
       // Only add message if it's for the current conversation
       if (selectedUser && (newMessage.senderId === selectedUser._id || newMessage.receiverId === selectedUser._id)) {
         set({ messages: [...messages, newMessage] });
+        // Emit delivered status
+        socket.emit("message-delivered", { messageId: newMessage._id, senderId: newMessage.senderId });
       }
     });
 
@@ -44,6 +46,14 @@ export const useChatStore = create((set, get) => ({
         set({ isTyping: false, typingUser: null });
       }
     });
+
+    socket.on("message-status-update", ({ messageId, status }) => {
+      const { messages } = get();
+      const updatedMessages = messages.map(msg => 
+        msg._id === messageId ? { ...msg, status } : msg
+      );
+      set({ messages: updatedMessages });
+    });
   },
 
   unsubscribeFromMessages: () => {
@@ -51,6 +61,7 @@ export const useChatStore = create((set, get) => ({
     socket.off("update-online-users");
     socket.off("user-typing");
     socket.off("user-stop-typing");
+    socket.off("message-status-update");
   },
 
   emitTyping: (receiverId) => {
@@ -78,6 +89,14 @@ export const useChatStore = create((set, get) => ({
     try {
       const res = await axios.get(`${API_URL}/${userId}`);
       set({ messages: res.data });
+      // Mark messages as read
+      await axios.put(`${API_URL}/read/${userId}`);
+      // Emit read status for each unread message
+      res.data.forEach(msg => {
+        if (msg.receiverId === get().selectedUser?._id && msg.status !== "read") {
+          socket.emit("message-read", { messageId: msg._id, senderId: msg.senderId });
+        }
+      });
     } catch (error) {
       console.log("Error in getMessages:", error);
     } finally {
